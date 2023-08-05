@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <title>Blog Home</title>
+</head>
+
+<body>
+    <!--navbar-->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container ">
+          <a class="navbar-brand" href="#">Blog Market</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            <div class="navbar ">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'blog-home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'blog-about' %}">About Us</a>
+                    </li>
+                </ul>
+            </div>
+            <div  class="">
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'post-create' %}">Create Post</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'blog-signout' %}">Sign out</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'blog-register' %}">Register</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'blog-login' %}">Log In</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+          </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+           <div class="col-md-8">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tag }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+              {% block content %}{% endblock %}
+           </div>
+            <!-- side section -->
+            <div class="col-md-4">
+                <div class="content-section mt-5 border border-2 p-4 rounded">
+                    <h3 class="my-3">Hottest topics</h3>
+                    <div class="border border-2 p-4 rounded my-3">
+                        <h4><a href="">The best juice ever exist</a></h4>
+                        <p>Apple is one of the fruit that has vit C effect.</p>
+                    </div>
+                    <div class="border border-2 p-4 rounded my-3">
+                        <h4><a href="">The best juice ever exist</a></h4>
+                        <p>Apple is one of the fruit that has vit C effect.</p>
+                    </div>
+                    <div class="border border-2 p-4 rounded my-3">
+                        <h4><a href="">The best juice ever exist</a></h4>
+                        <p>Apple is one of the fruit that has vit C effect.</p>
+                    </div>
+                </div>               
+            </div>
+        </div>
+        {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+    {% endif %}
+    </div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+</body>
+</html>
